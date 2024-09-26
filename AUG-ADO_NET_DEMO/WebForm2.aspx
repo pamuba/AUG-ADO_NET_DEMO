@@ -2,7 +2,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="MainContent" runat="server">
     <asp:GridView ID="GridView1" AllowPaging="true" PageSize="4" AutoGenerateColumns="false" DataKeyNames="studentId"
         runat="server" CellPadding="4" ForeColor="#333333" GridLines="None" 
-        OnPageIndexChanged="GridView1_PageIndexChanged" OnPageIndexChanging="GridView1_PageIndexChanging" OnRowEditing="GridView1_RowEditing" OnRowCancelingEdit="GridView1_RowCancelingEdit">
+        OnPageIndexChanged="GridView1_PageIndexChanged" OnPageIndexChanging="GridView1_PageIndexChanging" OnRowEditing="GridView1_RowEditing" OnRowCancelingEdit="GridView1_RowCancelingEdit" OnRowDeleting="GridView1_RowDeleting" OnRowUpdating="GridView1_RowUpdating" OnRowDataBound="GridView1_RowDataBound">
         <AlternatingRowStyle BackColor="White" ForeColor="#284775" />
         <EditRowStyle BackColor="#999999" />
         <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
@@ -16,13 +16,16 @@
         <SortedDescendingHeaderStyle BackColor="#6F8DAE" />
 
         <Columns>
-            <asp:BoundField DataField="studentId" HeaderText="STUDENT ID" SortExpression="studentId" />
+            <asp:BoundField ReadOnly="true" DataField="studentId" HeaderText="STUDENT ID" SortExpression="studentId" />
             <asp:BoundField DataField="studentName" HeaderText="STUDENT NAME" SortExpression="studentName" />
 
             <asp:TemplateField HeaderText="STREAM"  SortExpression="stream">
                 <ItemTemplate><%# Eval("stream") %></ItemTemplate>
                 <EditItemTemplate>
-                    <asp:TextBox ID="streamTB" runat="server" Text='<%# Bind("stream") %>'></asp:TextBox>
+                    <%--<asp:TextBox ID="streamTB" runat="server" Text='<%# Bind("stream") %>'></asp:TextBox>--%>
+                    <asp:DropDownList ID="DropDownList1" runat="server">
+                       
+                    </asp:DropDownList>
                 </EditItemTemplate>
             </asp:TemplateField>
 
@@ -33,8 +36,10 @@
                  </EditItemTemplate>
              </asp:TemplateField>
             <asp:CommandField  HeaderText="ACTIONS" ShowDeleteButton="true" ShowEditButton="true" ShowSelectButton="true" ShowInsertButton="true"/>
-
         </Columns>
-
     </asp:GridView>
+    <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
+    <hr />
+    <asp:Button ID="btnUpdateDatabase" runat="server" Text="" OnClick="btnUpdateDatabase_Click" />
+    <asp:Button ID="btnGetDataFromDB" runat="server" Text="" OnClick="btnGetDataFromDB_Click"/>
 </asp:Content>
