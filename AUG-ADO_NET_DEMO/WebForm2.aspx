@@ -24,7 +24,6 @@
                 <EditItemTemplate>
                     <%--<asp:TextBox ID="streamTB" runat="server" Text='<%# Bind("stream") %>'></asp:TextBox>--%>
                     <asp:DropDownList ID="DropDownList1" runat="server">
-                       
                     </asp:DropDownList>
                 </EditItemTemplate>
             </asp:TemplateField>
@@ -40,6 +39,16 @@
     </asp:GridView>
     <asp:Label ID="Label1" runat="server" Text=""></asp:Label>
     <hr />
-    <asp:Button ID="btnUpdateDatabase" runat="server" Text="" OnClick="btnUpdateDatabase_Click" />
-    <asp:Button ID="btnGetDataFromDB" runat="server" Text="" OnClick="btnGetDataFromDB_Click"/>
+    <asp:Button ID="btnUpdateDatabase" runat="server" Text="Save Data to DB" OnClick="btnUpdateDatabase_Click" />
+    <asp:Button ID="btnGetDataFromDB" runat="server" Text="Load Data From DB" OnClick="btnGetDataFromDB_Click"/>
+    <asp:Button ID="Button1" runat="server" OnClick="Button1_Click" Text="Row State" />
+    <asp:Button ID="Button2" runat="server" Text="Undo" OnClick="Button2_Click" />
+    <br />
+    <asp:Label ID="Label2" runat="server" Text=""></asp:Label>
+    <br />
+    <asp:Label ID="Label3" runat="server" Text=""></asp:Label>
+    <hr />
+    <asp:DropDownList ID="DropDownList2" runat="server"></asp:DropDownList>
+    <asp:Button ID="Button3" runat="server" Text="Button" OnClick="Button3_Click" />
+    <asp:Label ID="Label4" runat="server" Text="Label"></asp:Label>
 </asp:Content>

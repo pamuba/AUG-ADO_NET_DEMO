@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
+using System.Data.Common;
 using System.Data.SqlClient;
 using System.IO;
 using System.Linq;
@@ -18,9 +19,17 @@ namespace AUG_ADO_NET_DEMO
         SqlConnection con = new SqlConnection(CS);
         protected void Page_Load(object sender, EventArgs e)
         {
-            //if (!Page.IsPostBack) {
-            //    BindData();
-            //}
+            if (!Page.IsPostBack)
+            {
+                //BindData();
+                DataTable dt = new DataTable();
+                SqlDataAdapter d = new SqlDataAdapter("Select * from Student", con);
+                d.Fill(dt);
+                DropDownList2.DataSource = dt;
+                DropDownList2.DataTextField = "stream";
+                DropDownList2.DataValueField = "stream";
+                DropDownList2.DataBind();
+            }
 
         }
         protected void GetDataFromDB() {
@@ -59,14 +68,6 @@ namespace AUG_ADO_NET_DEMO
         protected void GridView1_RowEditing(object sender, GridViewEditEventArgs e)
         {
             GridView1.EditIndex = e.NewEditIndex;
-
-            DataSet dataSet = (DataSet)Cache["DATASET"];
-            DropDownList DropDownList1 = (GridView1.Rows[e.NewEditIndex].FindControl("DropDownList1")) as DropDownList;
-            DropDownList1.DataSource = dataSet.Tables["Student"];
-            DropDownList1.DataTextField = "stream";
-            DropDownList1.DataValueField = "stream";
-            DropDownList1.DataBind();
-
             GetDataFromCache();
         }
 
@@ -109,7 +110,8 @@ namespace AUG_ADO_NET_DEMO
             DataRow dataRow = dataSet.Tables["Student"].Rows.Find(e.Keys["studentId"]);
             //Update the datarow values
             dataRow["studentName"] = e.NewValues["studentName"];
-            dataRow["stream"] = e.NewValues["stream"];
+            //dataRow["stream"] = e.NewValues["stream"];
+            dataRow["stream"] = ((DropDownList)(GridView1.Rows[e.RowIndex].FindControl("DropDownList1"))).SelectedValue.ToString();
             dataRow["marks"] = e.NewValues["marks"];
             //Overwrite the dataset in the cache
             Cache.Insert("DATASET", dataSet, null, DateTime.Now.AddHours(1), System.Web.Caching.Cache.NoSlidingExpiration);
@@ -173,7 +175,67 @@ namespace AUG_ADO_NET_DEMO
 
         protected void GridView1_RowDataBound(object sender, GridViewRowEventArgs e)
         {
-           
+            if (e.Row.RowType == DataControlRowType.DataRow)
+            {
+                if ((e.Row.RowState & DataControlRowState.Edit) > 0)
+                {
+                    DataSet dataSet = (DataSet)Cache["DATASET"];
+                    DropDownList DropDownList1 = (e.Row.FindControl("DropDownList1")) as DropDownList;
+                    DropDownList1.DataSource = dataSet.Tables["Student"].Rows.Cast<DataRow>().Select(r => r.Field<string>("stream")).Distinct();
+                    //DropDownList1.DataSource = dataSet.Tables["Student"];
+                    //DropDownList1.DataTextField = "stream";
+                    //DropDownList1.DataValueField = "stream";
+                    DropDownList1.DataBind();
+                }
+            }
+        }
+
+        protected void Button1_Click(object sender, EventArgs e)
+        {
+            DataSet ds = (DataSet)Cache["DATASET"];
+            DataRow row = ds.Tables["Student"].NewRow();
+            row["studentId"] = 101;
+            //ds.Tables["Student"].Rows.Add(row);
+
+            Label2.Text = "";
+            foreach (DataRow dr in ds.Tables["Student"].Rows) {
+                if (dr.RowState == DataRowState.Deleted)
+                {
+                    Label2.Text += dr["studentId", DataRowVersion.Original].ToString() + " " + dr.RowState.ToString() + "<br />";
+                }
+                else {
+                    Label2.Text += dr["studentId", DataRowVersion.Current].ToString() + " " + dr.RowState.ToString() + "<br />";
+                }
+            }
+
+            Response.Write(row.RowState.ToString());
+        }
+
+        protected void Button2_Click(object sender, EventArgs e)
+        {
+            //DataSet ds = (DataSet)Cache["DATASET"];
+            //if (ds.HasChanges())
+            //{
+            //    ds.RejectChanges();
+            //    Cache.Insert("DATASET", ds, null, DateTime.Now.AddHours(1), System.Web.Caching.Cache.NoSlidingExpiration);
+            //    GetDataFromCache();
+            //    Label3.ForeColor = System.Drawing.Color.Green;
+            //    Label3.Text = "Changes UNDONE";
+            //}
+            //else {
+            //    Label3.ForeColor = System.Drawing.Color.Red;
+            //    Label3.Text = "No Changes to UNDO";
+            //}
+
+            DataSet ds = (DataSet)Cache["DATASET"];
+            ds.AcceptChanges();
+            Cache.Insert("DATASET", ds, null, DateTime.Now.AddHours(1), System.Web.Caching.Cache.NoSlidingExpiration);
+            GetDataFromCache();
+        }
+
+        protected void Button3_Click(object sender, EventArgs e)
+        {
+            Label4.Text = DropDownList2.SelectedValue.ToString();
         }
     }
 }
