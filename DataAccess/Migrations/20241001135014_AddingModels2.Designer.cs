@@ -4,6 +4,7 @@ using EF_DataAccess.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EF_DataAccess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241001135014_AddingModels2")]
+    partial class AddingModels2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -68,16 +71,11 @@ namespace EF_DataAccess.Migrations
                         .HasPrecision(9, 4)
                         .HasColumnType("decimal(9,4)");
 
-                    b.Property<int>("Publisher_Id")
-                        .HasColumnType("int");
-
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("BookID");
-
-                    b.HasIndex("Publisher_Id");
 
                     b.ToTable("Books");
 
@@ -87,7 +85,6 @@ namespace EF_DataAccess.Migrations
                             BookID = 1,
                             ISBN = "12345678",
                             Price = 11.99m,
-                            Publisher_Id = 1,
                             Title = "Spider Man"
                         },
                         new
@@ -95,7 +92,6 @@ namespace EF_DataAccess.Migrations
                             BookID = 2,
                             ISBN = "12345678",
                             Price = 21.99m,
-                            Publisher_Id = 1,
                             Title = "Super Man"
                         },
                         new
@@ -103,7 +99,6 @@ namespace EF_DataAccess.Migrations
                             BookID = 3,
                             ISBN = "12345678",
                             Price = 41.99m,
-                            Publisher_Id = 2,
                             Title = "Iron Man"
                         },
                         new
@@ -111,24 +106,8 @@ namespace EF_DataAccess.Migrations
                             BookID = 4,
                             ISBN = "12345678",
                             Price = 61.99m,
-                            Publisher_Id = 3,
                             Title = "ADO Man"
                         });
-                });
-
-            modelBuilder.Entity("EF_Models.Models.BookAuthorMap", b =>
-                {
-                    b.Property<int>("Author_Id")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Book_Id")
-                        .HasColumnType("int");
-
-                    b.HasKey("Author_Id", "Book_Id");
-
-                    b.HasIndex("Book_Id");
-
-                    b.ToTable("BookAuthorMaps");
                 });
 
             modelBuilder.Entity("EF_Models.Models.BookDetail", b =>
@@ -139,9 +118,6 @@ namespace EF_DataAccess.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookDetail_Id"));
 
-                    b.Property<int>("BookID")
-                        .HasColumnType("int");
-
                     b.Property<int>("NumberOfChapters")
                         .HasColumnType("int");
 
@@ -152,65 +128,8 @@ namespace EF_DataAccess.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("BookDetail_Id");
-
-                    b.HasIndex("BookID")
-                        .IsUnique();
 
                     b.ToTable("BookDetails");
-                });
-
-            modelBuilder.Entity("EF_Models.Models.Fluent_Book", b =>
-                {
-                    b.Property<int>("BookID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookID"));
-
-                    b.Property<string>("ISBN")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("BookID");
-
-                    b.ToTable("Book_Fluent", (string)null);
-                });
-
-            modelBuilder.Entity("EF_Models.Models.Fluent_BookDetail", b =>
-                {
-                    b.Property<int>("BookDetail_Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookDetail_Id"));
-
-                    b.Property<int>("BookID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NumberOfChapters")
-                        .HasColumnType("int")
-                        .HasColumnName("NumberOfChapters");
-
-                    b.Property<int>("NumberOfPages")
-                        .HasColumnType("int");
-
-                    b.Property<double>("Weight")
-                        .HasColumnType("float");
-
-                    b.HasKey("BookDetail_Id");
-
-                    b.HasIndex("BookID")
-                        .IsUnique();
-
-                    b.ToTable("BookDetail_Fluent", (string)null);
                 });
 
             modelBuilder.Entity("EF_Models.Models.Genre", b =>
@@ -252,26 +171,6 @@ namespace EF_DataAccess.Migrations
                     b.HasKey("Publisher_Id");
 
                     b.ToTable("Publishers");
-
-                    b.HasData(
-                        new
-                        {
-                            Publisher_Id = 1,
-                            Location = "Hawaii",
-                            Name = "Swan"
-                        },
-                        new
-                        {
-                            Publisher_Id = 2,
-                            Location = "NY",
-                            Name = "Longman"
-                        },
-                        new
-                        {
-                            Publisher_Id = 3,
-                            Location = "Chicago",
-                            Name = "Apress"
-                        });
                 });
 
             modelBuilder.Entity("EF_Models.Models.SubCategory", b =>
@@ -290,77 +189,6 @@ namespace EF_DataAccess.Migrations
                     b.HasKey("SubCategory_Id");
 
                     b.ToTable("SubCategorys");
-                });
-
-            modelBuilder.Entity("EF_Models.Models.Book", b =>
-                {
-                    b.HasOne("EF_Models.Models.Publisher", "Publisher")
-                        .WithMany()
-                        .HasForeignKey("Publisher_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Publisher");
-                });
-
-            modelBuilder.Entity("EF_Models.Models.BookAuthorMap", b =>
-                {
-                    b.HasOne("EF_Models.Models.Author", "Author")
-                        .WithMany("BookAuthor")
-                        .HasForeignKey("Author_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("EF_Models.Models.Book", "Book")
-                        .WithMany("BookAuthor")
-                        .HasForeignKey("Book_Id")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Author");
-
-                    b.Navigation("Book");
-                });
-
-            modelBuilder.Entity("EF_Models.Models.BookDetail", b =>
-                {
-                    b.HasOne("EF_Models.Models.Book", "Book")
-                        .WithOne("BookDetail")
-                        .HasForeignKey("EF_Models.Models.BookDetail", "BookID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Book");
-                });
-
-            modelBuilder.Entity("EF_Models.Models.Fluent_BookDetail", b =>
-                {
-                    b.HasOne("EF_Models.Models.Fluent_Book", "Fluent_Book")
-                        .WithOne("Fluent_BookDetail")
-                        .HasForeignKey("EF_Models.Models.Fluent_BookDetail", "BookID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Fluent_Book");
-                });
-
-            modelBuilder.Entity("EF_Models.Models.Author", b =>
-                {
-                    b.Navigation("BookAuthor");
-                });
-
-            modelBuilder.Entity("EF_Models.Models.Book", b =>
-                {
-                    b.Navigation("BookAuthor");
-
-                    b.Navigation("BookDetail")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("EF_Models.Models.Fluent_Book", b =>
-                {
-                    b.Navigation("Fluent_BookDetail")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }
