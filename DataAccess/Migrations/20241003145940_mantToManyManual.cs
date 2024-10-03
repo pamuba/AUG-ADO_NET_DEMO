@@ -5,46 +5,46 @@
 namespace EF_DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class relations3 : Migration
+    public partial class mantToManyManual : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "AuthorBook",
+                name: "Fluent_BookAuthorMap",
                 columns: table => new
                 {
-                    AuthorsAuthor_Id = table.Column<int>(type: "int", nullable: false),
-                    BooksBookID = table.Column<int>(type: "int", nullable: false)
+                    Book_Id = table.Column<int>(type: "int", nullable: false),
+                    Author_Id = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AuthorBook", x => new { x.AuthorsAuthor_Id, x.BooksBookID });
+                    table.PrimaryKey("PK_Fluent_BookAuthorMap", x => new { x.Author_Id, x.Book_Id });
                     table.ForeignKey(
-                        name: "FK_AuthorBook_Authors_AuthorsAuthor_Id",
-                        column: x => x.AuthorsAuthor_Id,
-                        principalTable: "Authors",
+                        name: "FK_Fluent_BookAuthorMap_Fluent_Authors_Author_Id",
+                        column: x => x.Author_Id,
+                        principalTable: "Fluent_Authors",
                         principalColumn: "Author_Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_AuthorBook_Books_BooksBookID",
-                        column: x => x.BooksBookID,
-                        principalTable: "Books",
+                        name: "FK_Fluent_BookAuthorMap_Fluent_Books_Book_Id",
+                        column: x => x.Book_Id,
+                        principalTable: "Fluent_Books",
                         principalColumn: "BookID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_AuthorBook_BooksBookID",
-                table: "AuthorBook",
-                column: "BooksBookID");
+                name: "IX_Fluent_BookAuthorMap_Book_Id",
+                table: "Fluent_BookAuthorMap",
+                column: "Book_Id");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "AuthorBook");
+                name: "Fluent_BookAuthorMap");
         }
     }
 }

@@ -26,6 +26,7 @@ namespace EF_Models.Models
                 return $"{FirstName} {LastName}";
             }
         }
-        //public List<BookAuthorMap> BookAuthor { get; set; }
+        //public List<Fluent_Book> Fluent_Books { get; set; }
+        public List<Fluent_BookAuthorMap> BookAuthorMap { get; set; }
     }
 }

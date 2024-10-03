@@ -15,7 +15,7 @@ namespace EF_Models.Models
         //[ForeignKey("Author")]
         public int Author_Id { get; set; }
 
-        //public Book Book { get; set; }
-        //public Author Author { get; set; }
+        public Fluent_Book Book { get; set; }
+        public Fluent_Author Author { get; set; }
     }
 }

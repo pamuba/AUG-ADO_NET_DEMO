@@ -5,7 +5,7 @@
 namespace EF_DataAccess.Migrations
 {
     /// <inheritdoc />
-    public partial class BookNotMapped : Migration
+    public partial class Config : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

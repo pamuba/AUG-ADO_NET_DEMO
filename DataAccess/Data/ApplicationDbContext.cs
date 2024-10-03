@@ -1,5 +1,7 @@
-﻿using EF_Models.Models;
+﻿using EF_DataAccess.FluentConfig;
+using EF_Models.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +10,12 @@ using System.Threading.Tasks;
 
 namespace EF_DataAccess.Data
 {
-    internal class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : DbContext
     {
         public DbSet<Fluent_BookDetail> Fluent_BookDetails { get; set; }
         public DbSet<Fluent_Book> Fluent_Books { get; set; }
-        //public DbSet<Fluent_Author> Fluent_Authors { get; set; }
-        //public DbSet<Fluent_Publisher> Fluent_Publishers { get; set; }
+        public DbSet<Fluent_Author> Fluent_Authors { get; set; }
+        public DbSet<Fluent_Publisher> Fluent_Publishers { get; set; }
         //public DbSet<Fluent_BookAuthorMap> Fluent_BookAuthorMaps { get; set; }
         
         public DbSet<Book> Books { get; set; }
@@ -25,7 +27,8 @@ namespace EF_DataAccess.Data
         public DbSet<BookAuthorMap> BookAuthorMaps { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseSqlServer("Server=MLBSRL1-106854;Database=SSIS;Integrated Security=True;Trust Server Certificate=True;");
+            options.UseSqlServer("Server=MLBSRL1-106854;Database=EF;Integrated Security=True;Trust Server Certificate=True;")
+                .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name},LogLevel.Information);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,20 +37,14 @@ namespace EF_DataAccess.Data
 
 
             //Fluent API Code
-            modelBuilder.Entity<Fluent_BookDetail>().ToTable("BookDetail_Fluent");
-            modelBuilder.Entity<Fluent_BookDetail>().Property(u => u.NumberOfChapters).HasColumnName("NumberOfChapters");
-            modelBuilder.Entity<Fluent_BookDetail>().Property(u => u.NumberOfChapters).IsRequired();
-            modelBuilder.Entity<Fluent_BookDetail>().HasKey(u => u.BookDetail_Id);
-            modelBuilder.Entity<Fluent_BookDetail>().HasOne(b => b.Fluent_Book).WithOne(b => b.Fluent_BookDetail)
-                .HasForeignKey<Fluent_BookDetail>("BookID");
 
+            modelBuilder.ApplyConfiguration(new FluentBookDetailConfig());
+            modelBuilder.ApplyConfiguration(new FluentBookConfig());
+            modelBuilder.ApplyConfiguration(new Fluent_PublisherConfig());
+            modelBuilder.ApplyConfiguration(new Fluent_AuthorConfig());
+            modelBuilder.ApplyConfiguration(new Fluent_BookAuthorMapConfig());
 
-            modelBuilder.Entity<Fluent_Book>().ToTable("Book_Fluent");
-            modelBuilder.Entity<Fluent_Book>().HasKey(u => u.BookID);
-            modelBuilder.Entity<Fluent_Book>().Property(u => u.ISBN).IsRequired();
-            modelBuilder.Entity<Fluent_Book>().Property(u => u.ISBN).HasMaxLength(20);
-            modelBuilder.Entity<Fluent_Book>().Ignore(u => u.PriceRange);
-
+            //Seeding
             modelBuilder.Entity<Book>().HasData(
                     new Book { BookID = 1, Title="Spider Man", ISBN="12345678", Price=11.99m, Publisher_Id=1},
                     new Book { BookID = 2, Title = "Super Man", ISBN = "12345678", Price = 21.99m, Publisher_Id = 1 }

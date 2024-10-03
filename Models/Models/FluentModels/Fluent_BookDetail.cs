@@ -19,7 +19,7 @@ namespace EF_Models.Models
         public double Weight { get; set; }
 
         //[ForeignKey("Book")]
-        //public int BookID { get; set; }
+        public int BookID { get; set; }
 
         //Navigation Property
         public Fluent_Book Fluent_Book { get; set; }

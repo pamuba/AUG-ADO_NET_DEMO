@@ -24,9 +24,10 @@ namespace EF_Models.Models
         public Fluent_BookDetail Fluent_BookDetail { get; set; }
 
         //[ForeignKey("Publisher")]
-        //public int Publisher_Id { get; set; }
-        //public Publisher Publisher { get; set; }
+        public int Publisher_Id { get; set; }
+        public Fluent_Publisher Fluent_Publisher { get; set; }
 
-        //public List<BookAuthorMap> BookAuthor { get; set; }
+        //public List<Fluent_Author> Fluent_Authors { get; set; }
+        public List<Fluent_BookAuthorMap> BookAuthorMap { get; set; }
     }
 }
