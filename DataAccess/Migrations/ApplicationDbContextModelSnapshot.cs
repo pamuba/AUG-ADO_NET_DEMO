@@ -159,6 +159,23 @@ namespace EF_DataAccess.Migrations
                     b.ToTable("BookDetails");
                 });
 
+            modelBuilder.Entity("EF_Models.Models.Category", b =>
+                {
+                    b.Property<int>("Category_Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Category_Id"));
+
+                    b.Property<string>("Category_Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Category_Id");
+
+                    b.ToTable("Categories");
+                });
+
             modelBuilder.Entity("EF_Models.Models.Fluent_Author", b =>
                 {
                     b.Property<int>("Author_Id")

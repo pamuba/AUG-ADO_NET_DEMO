@@ -12,6 +12,11 @@ namespace EF_DataAccess.Data
 {
     public class ApplicationDbContext : DbContext
     {
+        //DI Injected
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        {
+
+        }
         public DbSet<Fluent_BookDetail> Fluent_BookDetails { get; set; }
         public DbSet<Fluent_Book> Fluent_Books { get; set; }
         public DbSet<Fluent_Author> Fluent_Authors { get; set; }
@@ -25,10 +30,12 @@ namespace EF_DataAccess.Data
         public DbSet<SubCategory> SubCategorys { get; set; }
         public DbSet<BookDetail> BookDetails { get; set; }
         public DbSet<BookAuthorMap> BookAuthorMaps { get; set; }
+
+        public DbSet<Category> Categories { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         {
-            options.UseSqlServer("Server=MLBSRL1-106854;Database=EF;Integrated Security=True;Trust Server Certificate=True;")
-                .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name},LogLevel.Information);
+            //options.UseSqlServer("Server=MLBSRL1-106854;Database=EF;Integrated Security=True;Trust Server Certificate=True;")
+            //    .LogTo(Console.WriteLine, new[] { DbLoggerCategory.Database.Command.Name }, LogLevel.Information);
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
