@@ -65,7 +65,7 @@ app.UseEndpoints(endpints =>
 app.UseEndpoints(endpints =>
 {
     //add our endpoints
-    endpints.Map("employee/profile/{EmployeeName=John}", async (context) =>
+    endpints.Map("employee/profile/{EmployeeName:alpha:length(1,8)=John}", async (context) =>
     {
         string? EmployeeName = Convert.ToString(context.Request.RouteValues["EmployeeName"]);
         await context.Response.WriteAsync($"Employee Name in DB: {EmployeeName}");
@@ -77,8 +77,9 @@ app.UseEndpoints(endpints =>
 app.UseEndpoints(endpints =>
 {
     //add our endpoints
-    endpints.Map("employee/dept/{EmployeeID?}", async (context) =>
-    {
+    //endpints.Map("employee/dept/{EmployeeID:int:min(333):max(888)?}", async (context) =>
+    endpints.Map("employee/dept/{EmployeeID:int:range(333,888)?}", async (context) =>
+     {
         int? EmployeeID = Convert.ToInt32(context.Request.RouteValues["EmployeeID"]);
         await context.Response.WriteAsync($"Employee ID in DB: {EmployeeID}");
     });
